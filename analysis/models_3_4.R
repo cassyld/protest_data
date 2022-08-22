@@ -58,15 +58,11 @@ acled_modeling <-
 
 # data cleaning
 ccc_modeling <- ccc_modeling %>% filter(!(counter_event == 0 & matching_counter == 1))
-# set up df with only necessary predictors
-acled_chem <- acled_modeling %>%
-  select(counter_event, issue_racism = racism, chemical_agents) %>% 
-  filter(across(everything(), ~ !is.na(.x)))
 ####################################################################
 
 ####################################################################
 # Predicting Arrests
-## ACLED (Model 3)
+## ACLED data (Model 3)
 acled_arr <- acled_modeling %>%
   select(counter_event, issue_racism = racism, arrests_any) %>% 
   filter(across(everything(), ~ !is.na(.x)))
@@ -79,12 +75,14 @@ set.seed(45)
 acled_arr_train <- acled_arr %>%
   mutate(arrests_any = factor(arrests_any, levels = c(1, 0), labels = c("yes","no")))
 
-# over & undersample
+# Under-sample non-events and over-sample events
 acled_arr_balanced <- ovun.sample(arrests_any ~ ., data = acled_arr_train,
                                   N = nrow(acled_arr_train), p = 0.4, 
                                   seed = 45, method = "both")$data
 
-# make arrests data
+## CCC data (Models 4a, 4b)
+
+# set up df with necessary columns
 ccc_arr <- ccc_modeling %>%
   filter(!is.na(arrests_any), !is.na(valence), valence != 0) %>% 
   select(counter_event, issue_racism, arrests_any, valence) %>% 
@@ -97,7 +95,7 @@ ccc_arr %>% group_by(arrests_any) %>% summarize(n=n()) %>% mutate(tot = sum(n), 
 ccc_arr_train <- ccc_arr %>%
   mutate(arrests_any = factor(arrests_any, levels = c(1, 0), labels = c("yes","no")))
 
-# over & undersample
+# Under-sample non-events and over-sample events
 ccc_arr_balanced <- ovun.sample(arrests_any ~ ., data = ccc_arr_train,
                                 N = nrow(ccc_arr_train), p = 0.4, 
                                 seed = 45, method = "both")$data

@@ -56,15 +56,11 @@ acled_modeling <-
 
 # data cleaning
 ccc_modeling <- ccc_modeling %>% filter(!(counter_event == 0 & matching_counter == 1))
-# set up df with only necessary predictors
-acled_chem <- acled_modeling %>%
-  select(counter_event, issue_racism = racism, chemical_agents) %>% 
-  filter(across(everything(), ~ !is.na(.x)))
 ####################################################################
 
 ####################################################################
-## Predicting Arrests
-## ACLED 
+# Predicting Arrests
+## ACLED data (Model 11)
 # arrests df
 acled_arr <- acled_modeling %>%
   select(counter_event, issue_racism = racism, arrests_any, source_soc_media) %>% 
@@ -82,7 +78,7 @@ acled_arr_balanced <- ovun.sample(arrests_any ~ ., data = acled_arr_train,
                                   N = nrow(acled_arr_train), p = 0.4, 
                                   seed = 45, method = "both")$data
 
-### CCC data
+## CCC data (Models 12a, 12b)
 # make arrests data
 ccc_arr <- ccc_modeling %>%
   filter(!is.na(arrests_any), !is.na(valence), valence != 0) %>% 

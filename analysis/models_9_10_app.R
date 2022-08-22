@@ -58,15 +58,10 @@ acled_modeling <-
 
 # data cleaning
 ccc_modeling <- ccc_modeling %>% filter(!(counter_event == 0 & matching_counter == 1))
-# set up df with only necessary predictors
-acled_chem <- acled_modeling %>%
-  select(counter_event, issue_racism = racism, chemical_agents) %>% 
-  filter(across(everything(), ~ !is.na(.x)))
-
 ####################################################################
 # Influence of Social Media Reporting
-## ACLED
-# set up df with only necessary predictors; very imbalanced 
+## ACLED data (Model 9)
+
 acled_chem <- acled_modeling %>%
   select(counter_event, issue_racism = racism, chemical_agents, source_soc_media) %>%
   filter(across(everything(), ~ !is.na(.x)))
@@ -75,7 +70,7 @@ acled_chem <- acled_modeling %>%
 acled_chem_train <- acled_chem %>% 
   mutate(chemical_agents = factor(chemical_agents, levels = c(1, 0), labels = c("yes","no")))
 
-# oversample CA and undersample non-CA events to 0.4 and 0.6
+# Under-sample non-events and over-sample events
 set.seed(45)
 acled_chem_balanced <- ovun.sample(chemical_agents ~ ., data = acled_chem_train,
                                    N = nrow(acled_chem_train), p = 0.4, 
@@ -85,8 +80,8 @@ acled_chem_balanced <- ovun.sample(chemical_agents ~ ., data = acled_chem_train,
 acled_chem_balanced %>% group_by(chemical_agents) %>%
   summarize(n = n()) %>% mutate(prop = n/sum(n))
 
-## CCC data
-# chem df
+## CCC data (Models 10a, 10b)
+
 ccc_chem <- ccc_modeling %>%
   select(counter_event, issue_racism, chemical_agents, valence, source_soc_media) %>% 
   filter(!is.na(chemical_agents), !is.na(valence), valence != 0) %>% 
@@ -98,7 +93,7 @@ ccc_chem <- ccc_modeling %>%
 ccc_chem_train <- ccc_chem %>%
   mutate(chemical_agents = factor(chemical_agents, levels = c(1, 0), labels = c("yes","no")))
 
-# over & undersample
+# Under-sample non-events and over-sample events
 set.seed(45)
 ccc_chem_balanced <- ovun.sample(chemical_agents ~ ., data = ccc_chem_train,
                                  N = nrow(ccc_chem_train), p = 0.4, 

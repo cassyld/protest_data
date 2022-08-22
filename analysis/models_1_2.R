@@ -67,24 +67,20 @@ acled_chem <- acled_modeling %>%
 # ACLED data
 acled_chem %>% group_by(chemical_agents) %>% summarize(n = n()) %>% mutate(tot = sum(n), prop = n/tot)
 
-# train/test & over & under-sampling. 
-# Oversample "yes" and undersample "no" until props are 0.4 and 0.6 respectively.
+# train/test
 set.seed(45)
 acled_chem_train <- acled_chem %>% 
   mutate(chemical_agents = factor(chemical_agents, levels = c(1, 0), labels = c("yes","no")))
 
-# over & undersample
+# Under-sample non-events and over-sample events
 acled_chem_balanced <- ovun.sample(chemical_agents ~ ., data = acled_chem_train,
                                    N = nrow(acled_chem_train), p = 0.4, 
                                    seed = 45, method = "both")$data
 
 acled_chem_balanced %>% group_by(chemical_agents) %>%
   summarize(n = n()) %>% mutate(prop = n/sum(n))
-####################################################################
 
-####################################################################
-# sampling strategy to address extreme data imbalance
-# CCC Data (Model 2a, 2b)
+## CCC Data (Model 2a, 2b)
 ccc_chem <- ccc_modeling %>%
   select(counter_event, issue_racism, chemical_agents, valence) %>% 
   filter(!is.na(chemical_agents), !is.na(valence), valence != 0) %>% 
@@ -100,7 +96,7 @@ set.seed(45)
 ccc_chem_train <- ccc_chem %>%
   mutate(chemical_agents = factor(chemical_agents, levels = c(1, 0), labels = c("yes","no")))
 
-# over & undersample
+# Under-sample non-events and over-sample events
 ccc_chem_balanced <- ovun.sample(chemical_agents ~ ., data = ccc_chem_train,
                                  N = nrow(ccc_chem_train), p = 0.4, 
                                  seed = 45, method = "both")$data
