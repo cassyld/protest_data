@@ -19,10 +19,18 @@ Replication files for each figure are separated into their own executable R file
 
 ### Replication of main models
 
-1. See "models.R"
+1. For the main models in the manuscript, including their graphics and tabular versions in the appendix, see:
+
+- `models1_2.R`
+- `models3_4.R`
 
 ###  Replication of appendix materials
 
 1. See "appendix_tables.R" for descriptive tables
-2. See "appendix_models.R" for supplemental models
+2. See the following appendix modeling files for supplemental models:
+
+- `models5_6.R`
+- `models7_8.R`
+- `models9_10.R`
+- `models11_12.R`
 
