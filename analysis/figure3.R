@@ -1,5 +1,5 @@
 ####################################################################
-# Replication Figures 3
+# Replication Figure 3
 # Paper Title: Data Innovations on Protests in the United States
 # Authors: Cassy Dorff, Grace Adcox, Amanda Konet
 ####################################################################
@@ -133,7 +133,7 @@ both_grp <- ccc_grp %>% rbind(acled_grp) %>%
          source = factor(source, levels = c("Social Media", "News")))
 
 # plot use of social media comparison
-soc_med_plot <- both_grp %>% 
+figure3 <- both_grp %>% 
   mutate(location = ifelse(location == "Washington DC", "Washington, D.C.", location)) %>% 
   ggplot(., aes(x = dataset, y = ct, fill = source)) + 
   geom_bar(stat = "identity", position = "stack") +
@@ -143,3 +143,5 @@ soc_med_plot <- both_grp %>%
   theme(panel.border = element_blank(),
         strip.background = element_rect(fill="#ebebeb", color="#ebebeb"),
         strip.text = element_text(face = "bold"))
+
+figure3

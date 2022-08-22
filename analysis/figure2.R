@@ -1,5 +1,5 @@
 ####################################################################
-# Replication Figures 2
+# Replication Figure 2
 # Paper Title: Data Innovations on Protests in the United States
 # Authors: Cassy Dorff, Grace Adcox, Amanda Konet
 ####################################################################

@@ -1,4 +1,9 @@
-# Figure 1
+####################################################################
+# Replication for Figure 1 in the MS
+# Paper Title: Data Innovations on Protests in the United States
+# Authors: Cassy Dorff, Grace Adcox, Amanda Konet
+####################################################################
+rm(list = ls())
 
 # libraries
 library(tidyverse)

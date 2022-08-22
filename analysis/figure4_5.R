@@ -3,7 +3,6 @@
 # Paper Title: Data Innovations on Protests in the United States
 # Authors: Cassy Dorff, Grace Adcox, Amanda Konet
 ####################################################################
-
 rm(list = ls())
 
 # libraries
@@ -27,9 +26,8 @@ library(tidygeocoder)
 # cd user paths
 if(Sys.info()['user'] %in% c('dorffc')){
   pathGit = '~/ProjectsGit/protest_data/'
-  pathDrop = '~/Dropbox/Research/protest_data/'
   pathData = paste0(pathGit, 'data/')
-  pathGraphics = paste0(pathDrop, 'graphics/')
+  pathGraphics = paste0(pathGit, 'graphics/')
 }
 
 # ak user paths
@@ -180,7 +178,7 @@ acled_by_county <- acled %>%
   select(fips_code, lat, long, group, pop, num_events, rate)
 
 # plot
-acled_map_scaled <- acled_by_county %>% 
+figure4 <- acled_by_county %>% 
   mutate(rate = ifelse(is.na(rate), 0, rate)) %>% 
   mutate(rate_bckt = case_when(
     rate == 0 ~ "0",
@@ -197,6 +195,8 @@ acled_map_scaled <- acled_by_county %>%
   guides(fill = guide_legend(nrow = 1)) + 
   theme_map() +
   theme(legend.position = "bottom")
+
+figure4
 ####################################################################
 
 # BREAK HERE
@@ -227,7 +227,7 @@ ccc_by_county <- ccc %>%
   select(fips_code, lat, long, group, pop, num_events, rate)
 
 # plot
-ccc_map_scaled <- ccc_by_county %>% 
+figure5 <- ccc_by_county %>% 
   mutate(rate = ifelse(is.na(rate), 0, rate)) %>% 
   mutate(rate_bckt = case_when(
     rate < 1 ~ "0",
@@ -248,3 +248,5 @@ ccc_map_scaled <- ccc_by_county %>%
   guides(fill = guide_legend(nrow = 1)) + 
   theme_map() +
   theme(legend.position = "bottom")
+
+figure5
