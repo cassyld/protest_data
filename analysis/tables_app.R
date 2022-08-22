@@ -106,12 +106,10 @@ ccc %>%
 
 ####################################################################
 # Appendix Table 3: ACLED Event Types Used in Main Analysis
-acled <- acled %>%
-  mutate(counter_event = ifelse(grepl("\\[counter", notes), 1, 0))
-
 acled %>% 
   group_by(event_type) %>% 
-  summarize(sum_counter = sum(counter_event == 1),
-            n_total = n(),
-            prop_counter = sum(counter_event == 1) / n())
+  summarize(n = n()) %>% 
+  arrange(-n) %>% 
+  mutate(prop = round(n/sum(n), 4)) %>% 
+  rename(`Event Type` = event_type, `Number of Events` = n, `Proportion of Events` = prop)
 ####################################################################
