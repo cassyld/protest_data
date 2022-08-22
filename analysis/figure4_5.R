@@ -199,3 +199,53 @@ acled_map_scaled <- acled_by_county %>%
   theme_map() +
   theme(legend.position = "bottom")
 ####################################################################
+
+# BREAK HERE
+# get fips code
+fips_codes <- fips_codes %>% mutate(fips_code = paste0(state_code,county_code)) %>% 
+  mutate(fips_code = ifelse(nchar(fips_code) < 5, paste0("0", fips_code), fips_code)) %>% 
+  mutate(county_name = paste0(county, ", ", state_name))
+
+# fips pop based on 2019 estimate
+fips_pop <- read_csv("./data/population_by_fips.csv") %>% 
+  mutate(fips_code = as.character(fips_code))
+
+
+# CCC: Use FIPS code directly
+# number of events by FIPS
+ccc_by_county <- ccc %>% 
+  filter(date >= ymd("2020-01-01"), date < ymd("2021-08-01")) %>% 
+  mutate(fips_code = ifelse(nchar(fips_code) < 5, paste0("0", fips_code), fips_code)) %>% 
+  group_by(fips_code) %>% 
+  summarize(num_events = n()) %>% 
+  # add pop info
+  left_join(., fips_pop, by = c("fips_code" = "fips_code")) %>% 
+  # calculate rate
+  mutate(num_events = ifelse(is.na(num_events), 0, num_events),
+         rate = (num_events/pop) * 100000) %>% 
+  # add geom info
+  right_join(., county_map_fips, by = c("fips_code" = "fips")) %>% 
+  select(fips_code, lat, long, group, pop, num_events, rate)
+
+# plot
+ccc_map_scaled <- ccc_by_county %>% 
+  mutate(rate = ifelse(is.na(rate), 0, rate)) %>% 
+  mutate(rate_bckt = case_when(
+    rate < 1 ~ "0",
+    rate >= 1 & rate < 10 ~ "< 10",
+    rate >= 10 & rate < 20 ~ "10-20",
+    rate >= 20 & rate < 30 ~ "20-30",
+    #rate >= 30 & rate < 40 ~ "30-40",
+    #rate >= 40 & rate < 50 ~ "40-50",
+    TRUE ~ "30+" )) %>% 
+  mutate(rate_bckt = fct_relevel(rate_bckt, "0", "< 10", "10-20", "20-30", "30+")) %>% #, "40-50", "50+")) %>% 
+
+  ggplot(., aes(x = long, y = lat, fill = rate_bckt, group = group)) +
+  geom_polygon(color = "gray90", size = 0.05) +
+  coord_equal() +
+  #scale_fill_grey(start = .8, end = 0, na.value = "#FFFFFF") +
+  scale_fill_brewer(palette = "Greys") +
+  labs(fill = "Events per 100k") +
+  guides(fill = guide_legend(nrow = 1)) + 
+  theme_map() +
+  theme(legend.position = "bottom")
