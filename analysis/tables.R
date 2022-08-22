@@ -68,6 +68,13 @@ ccc <- readr::read_csv(paste0(pathData,"ccc_clean_counter_indicator.csv"),
 
 # acled
 acled <- read_csv(paste0(pathData,"acled_clean.csv"))
+acled_pepper_irr <- read_csv("../data/acled_chem_agents/pepper_irritants_acled_notes.csv") %>%
+  filter(keep == 1) %>% 
+  select(-target)
+
+acled_teargas <- read_csv("../data/acled_chem_agents/teargas_acled_notes.csv") %>%
+  filter(keep == 1) %>% 
+  select(data_id, keep, context = tear_gas_context, notes)
 
 # nspe
 nspe <- read_dta(paste0(pathData,"nspe_project.dta"))
@@ -180,7 +187,6 @@ ccc %>%
 ####################################################################  
 # Table 6: ACLED-Reported Risks to Protesters at Counter-Protest Events
 # BREAK: very similar results, but not quite whats in the MS 
-  
 acled <- acled %>% 
   mutate(arrests_any = case_when(
     is.na(arrests) ~ 0,
@@ -188,20 +194,6 @@ acled <- acled %>%
       grepl("no arrests|nor arrests|no injuries or arrests|did not make any arrests|no one was arrested", arrests, ignore.case = T) ~ 0,
     T ~ 1))
   
-#acled %>% filter(event_type %in% c("Protests", "Riots")) %>% 
-  #group_by(event_type) %>% 
-  #summarize(sum_counter = sum(counter_event == 1),
-          #  n_total = n(),
-          #  prop_counter = sum(counter_event == 1) / n())
-  
-acled_pepper_irr <- read_csv("../data/acled_chem_agents/pepper_irritants_acled_notes.csv") %>%
-  filter(keep == 1) %>% 
-  select(-target)
-
-acled_teargas <- read_csv("../data/acled_chem_agents/teargas_acled_notes.csv") %>%
-  filter(keep == 1) %>% 
-  select(data_id, keep, context = tear_gas_context, notes)
-
 # rbind the two dfs, keep only distinct ids & val of keep
 acled_chem_ids <- rbind(acled_pepper_irr, acled_teargas) %>% 
   distinct(data_id, keep)
