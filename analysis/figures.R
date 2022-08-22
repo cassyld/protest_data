@@ -29,11 +29,9 @@ source(figure2.R)
 # Figure 3: Social media as a source in ACLED and CCC
 source(figure3.R)
 
-# Figure 4: Spatial distribution of protests, ACLED 
-# need figure 5 still, ccc map
+# Figure 4 & 5 (Maps) Spatial distribution of protests, ACLED & CCC
+# need figure 5 still, ccc map / fips codes
 source(figure4_5.R) 
-
-# Figure 5: Spatial distribution of protests, CCC 
 
 # Figure 6: Predicting Chemical Agent Deployment, CCC + ACLED
 
