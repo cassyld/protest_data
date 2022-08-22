@@ -72,7 +72,7 @@ acled <- read_csv(paste0(pathData,"acled_clean.csv"))
 # nspe
 nspe <- read_dta(paste0(pathData,"nspe_project.dta"))
 
-## FILTER BOTH DATASETS TO MOST RECENTLY COMPLETED MONTH
+# filter both data to most recently completed month 
 acled <- acled %>% filter(event_date < ymd("2021-08-01"))
 ccc_counter <- ccc %>% filter(date < ymd("2021-08-01"))
 ####################################################################
@@ -134,15 +134,115 @@ acled %>% filter(counter_event == 1) %>%
   mutate(prop_yr = round(n / sum(n),2))
 
 # CCC
-ccc %>% filter(counter_event == 1) %>% 
-  group_by(year(date)) %>% 
-  summarize(n = n()) %>% 
-  mutate(prop_yr = round(n / sum(n), 2))
+  ccc %>% filter(counter_event == 1) %>% 
+    group_by(year(date)) %>% 
+    summarize(n = n()) %>% 
+    mutate(prop_yr = round(n / sum(n), 2))
 ####################################################################
 
 ####################################################################
 # Table 4: CCC-Reported Risks to Protesters at Counter-Protest Events
-
-# Table 5: CCC-Reported Risks to Protesters at Counter-Protests
-
+ccc %>% 
+  filter(!(counter_event == 0 & matching_counter == 1)) %>% 
+  group_by(counter_event) %>% 
+  summarize(n = n(),
+           across(.cols = c(arrests_any, injuries_crowd_any,
+                           chemical_agents),
+                  .fns = ~ sum(.x, na.rm=T))) %>% 
+  mutate(n = ifelse(counter_event == 0, n - 1632, n),
+          arrests_any = ifelse(counter_event == 0, arrests_any - 204, arrests_any),
+          injuries_crowd_any = ifelse(counter_event == 0, injuries_crowd_any - 99, injuries_crowd_any),
+          chemical_agents = ifelse(counter_event == 0, chemical_agents - 14, chemical_agents)) %>% 
+  mutate(across(.cols = c(arrests_any, injuries_crowd_any,
+                           chemical_agents),
+                 .fns = ~.x / n * 100)) %>% 
+  mutate(across(where(is.numeric), round, 1)) %>% 
+  rename(`Event Type` = counter_event, `Event Count` = n, `Arrests` = arrests_any,
+          `Crowd Injuries` = injuries_crowd_any, `Chemical Agents` = chemical_agents)  
+  
+####################################################################
+# Table 5: CCC-Reported Risks to Protesters by Counter-Protests type  
+ccc %>% 
+  filter(counter_event == 1, valence != 0) %>% 
+  group_by(valence) %>% 
+  summarize(n = n(),
+            across(.cols = c(arrests_any, injuries_crowd_any,
+                              chemical_agents),
+                    .fns = ~ sum(.x, na.rm=T))) %>% 
+  mutate(across(.cols = c(arrests_any, injuries_crowd_any,
+                          chemical_agents),
+                .fns = ~.x / n * 100)) %>% 
+  mutate(across(where(is.numeric), round, 1)) %>% 
+  rename(Valence = valence, `Event Count` = n, `Arrests` = arrests_any,
+          `Crowd Injuries` = injuries_crowd_any, `Chemical Agents` = chemical_agents)  
+####################################################################
+  
+####################################################################  
 # Table 6: ACLED-Reported Risks to Protesters at Counter-Protest Events
+# BREAK: very similar results, but not quite whats in the MS 
+  
+acled <- acled %>% 
+  mutate(arrests_any = case_when(
+    is.na(arrests) ~ 0,
+    !is.na(arrests) & 
+      grepl("no arrests|nor arrests|no injuries or arrests|did not make any arrests|no one was arrested", arrests, ignore.case = T) ~ 0,
+    T ~ 1))
+  
+#acled %>% filter(event_type %in% c("Protests", "Riots")) %>% 
+  #group_by(event_type) %>% 
+  #summarize(sum_counter = sum(counter_event == 1),
+          #  n_total = n(),
+          #  prop_counter = sum(counter_event == 1) / n())
+  
+acled_pepper_irr <- read_csv("../data/acled_chem_agents/pepper_irritants_acled_notes.csv") %>%
+  filter(keep == 1) %>% 
+  select(-target)
+
+acled_teargas <- read_csv("../data/acled_chem_agents/teargas_acled_notes.csv") %>%
+  filter(keep == 1) %>% 
+  select(data_id, keep, context = tear_gas_context, notes)
+
+# rbind the two dfs, keep only distinct ids & val of keep
+acled_chem_ids <- rbind(acled_pepper_irr, acled_teargas) %>% 
+  distinct(data_id, keep)
+
+# check no duplicate ids (would mean i assigned diff 'keep' vals to same data_id)
+# should be 0 rows
+acled_chem_ids %>% group_by(data_id) %>% filter(n()>1)
+
+# add in var
+acled <- acled %>%
+  mutate(
+    chemical_agents = ifelse(data_id %in% acled_chem_ids$data_id, 1, 0),
+    # these two event types are not protest events
+    chemical_agents = ifelse(
+      event_type %in% c("Violence against civilians", "Strategic developments"),
+      0,
+      chemical_agents
+    ),
+    racism = ifelse((
+      grepl(
+        "NAACP|BLM|BVM|African American Group (United States)",
+        assoc_actor_1
+      ) |
+        grepl(
+          "NAACP|BLM|BVM|African American Group (United States)",
+          assoc_actor_2
+        )
+    ),
+    1, 0)
+  )
+
+acled %>% group_by(event_type) %>% summarize(n=n()) %>% arrange(-n)
+acled %>% group_by(sub_event_type) %>% summarize(n=n()) %>% arrange(-n)
+
+acled %>% 
+  group_by(counter_event) %>%
+  summarize(n = n(),
+            across(.cols = c(arrests_any, chemical_agents),
+                   .fns = ~ sum(.x, na.rm=T))) %>% 
+  mutate(across(.cols = c(arrests_any, chemical_agents),
+                .fns = ~.x / n * 100)) %>% 
+  mutate(across(where(is.numeric), round, 1)) %>% 
+  rename(`Event Type` = counter_event, `Event Count` = n,
+         `Arrests` = arrests_any,`Chemical Agents` = chemical_agents)
