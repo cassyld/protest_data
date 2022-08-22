@@ -15,13 +15,12 @@ library(patchwork)
 library(viridis)
 
 # cd user paths
+# cd user paths
 if(Sys.info()['user'] %in% c('dorffc')){
   pathGit = '~/ProjectsGit/protest_data/'
-  pathDrop = '~/Dropbox/Research/protest_data/'
   pathData = paste0(pathGit, 'data/')
-  pathGraphics = paste0(pathDrop, 'graphics/')
+  pathGraphics = paste0(pathGit, 'graphics/')
 }
-
 # ak user paths
 if(Sys.info()['user'] %in% c('Amanda')){
   pathGit = '~/Documents/Vanderbilt/c4_research_lab/c4_protestData/'
@@ -106,3 +105,6 @@ figure2 = ggplot() +
   theme_minimal()
 
 figure2
+
+ggsave(paste0(pathGraphics, "figure2.png"), plot = figure2, width = 8, height=5)
+

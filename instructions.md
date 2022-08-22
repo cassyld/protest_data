@@ -8,29 +8,40 @@ Authors: Cassy Dorff, Grace Adcox, Amanda Konet
 
 Replication files for each figure are separated into their own executable R file. Necessary packages are included in each. Figures associated with main modeling results are included in the modeling file and are clearly marked.
 
-1. Figure 1: "Spatial and temporal coverage, 13 datasets", see `figure1.R`
-2. Figure 2: "Temporal coverage across CCC and ACLED", see `figure2.R`
-3. Figure 3: "Social media as a source in ACLED and CCC", see `figure3.R`
-4. Figures 4 & 5: (Maps) Spatial distribution of protests, ACLED & CCC, see `figure4_5.R`
+1. Figure 1: "Spatial and temporal coverage, 13 datasets", see `figure_1.R` (pass)
+2. Figure 2: "Temporal coverage across CCC and ACLED", see `figure_2.R` (pass)
+3. Figure 3: "Social media as a source in ACLED and CCC", see `figure_3.R` (pass)
+4. Figures 4 & 5: (Maps) Spatial distribution of protests, ACLED & CCC, see `figure_4_5.R` (pass)
 
 ### Replication for descriptive tables (Tables 1-6)
 
 1. See R file "tables.R"
 
+- table 1 (fail)
+- table 2 (pass)
+- table 3 (fail)
+- table 4 (pass)
+- table 5 (pass)
+- table 6 (fail)
+
 ### Replication of main models
 
 1. For the main models in the manuscript, including their graphics and tabular versions in the appendix, see:
 
-- `models1_2.R`
-- `models3_4.R`
+- `models_1_2.R` (pass)
+- `models_3_4.R` (fail)
 
 ###  Replication of appendix materials
 
-1. See "appendix_tables.R" for descriptive tables
+1. See "tables_app.R" for all code to replicate descriptive tables in the appendix
+
+- table  2 (pass)
+- table 3 (fail)
+
 2. See the following appendix modeling files for supplemental models:
 
-- `models5_6.R`
-- `models7_8.R`
-- `models9_10.R`
-- `models11_12.R`
+- `models_5_6_app.R` (to-do)
+- `models_7_8_app.R` (to-do)
+- `models_9_10_app.R` (pass)
+- `models_11_12_app.R` (pass)
 

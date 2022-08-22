@@ -13,9 +13,8 @@ library(vistime)
 # cd user paths
 if(Sys.info()['user'] %in% c('dorffc')){
   pathGit = '~/ProjectsGit/protest_data/'
-  pathDrop = '~/Dropbox/Research/protest_data/'
   pathData = paste0(pathGit, 'data/')
-  pathGraphics = paste0(pathDrop, 'graphics/')
+  pathGraphics = paste0(pathGit, 'graphics/')
 }
 
 # ak user paths
@@ -27,7 +26,7 @@ if(Sys.info()['user'] %in% c('Amanda')){
 }
 
 
-tl_df <- readxl::read_xlsx(paste0(pathDrop, "data/timeline_events_datasets.xlsx"),
+tl_df <- readxl::read_xlsx(paste0(pathData, "timeline_events_datasets.xlsx"),
                            sheet = "coverage") %>% 
   rename(start = start_year, end = end_year) %>% 
   mutate(
@@ -97,3 +96,5 @@ figure1 = tl_df %>%
   theme_minimal()
 
 figure1
+
+#ggsave(paste0(pathGraphics, "figure1.png"), plot = figure1, width = 8, height=5)

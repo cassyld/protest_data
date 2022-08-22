@@ -197,18 +197,8 @@ figure4 <- acled_by_county %>%
   theme(legend.position = "bottom")
 
 figure4
+#ggsave(paste0(pathGraphics, "figure4.png"), plot = figure4, width = 8, height=5)
 ####################################################################
-
-# BREAK HERE
-# get fips code
-fips_codes <- fips_codes %>% mutate(fips_code = paste0(state_code,county_code)) %>% 
-  mutate(fips_code = ifelse(nchar(fips_code) < 5, paste0("0", fips_code), fips_code)) %>% 
-  mutate(county_name = paste0(county, ", ", state_name))
-
-# fips pop based on 2019 estimate
-fips_pop <- read_csv("./data/population_by_fips.csv") %>% 
-  mutate(fips_code = as.character(fips_code))
-
 
 # CCC: Use FIPS code directly
 # number of events by FIPS
@@ -242,7 +232,6 @@ figure5 <- ccc_by_county %>%
   ggplot(., aes(x = long, y = lat, fill = rate_bckt, group = group)) +
   geom_polygon(color = "gray90", size = 0.05) +
   coord_equal() +
-  #scale_fill_grey(start = .8, end = 0, na.value = "#FFFFFF") +
   scale_fill_brewer(palette = "Greys") +
   labs(fill = "Events per 100k") +
   guides(fill = guide_legend(nrow = 1)) + 
@@ -250,3 +239,5 @@ figure5 <- ccc_by_county %>%
   theme(legend.position = "bottom")
 
 figure5
+#ggsave(paste0(pathGraphics, "figure5.png"), plot = figure5, width = 8, height=5)
+

@@ -182,5 +182,5 @@ arr_plot <- arr_plot + coord_flip() + scale_color_discrete(guide=guide_legend(re
 arr_plot <- arr_plot + #ggtitle("Explanatory Factors in Arrests") +
   labs(y = "Log Odds", colour = "Model")  +
   theme_minimal()
-ggsave("results_full_data_arrests.png", plot = arr_plot, width = 8, height=5, path = pathGraphics)
+#ggsave("results_full_data_arrests.png", plot = arr_plot, width = 8, height=5, path = pathGraphics)
 print(arr_plot)

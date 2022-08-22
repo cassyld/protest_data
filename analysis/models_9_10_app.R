@@ -115,11 +115,6 @@ model10a <- glm(chemical_agents ~ counter_event + issue_racism + source_soc_medi
 model10b <- glm(chemical_agents ~ counter_event + issue_racism + source_soc_media + valence,
                 data = ccc_chem_balanced, family = "binomial")
 
-# save
-#save(model9, model10a, model10b,
-#     file =paste0(pathData,"chemical_agent_models_full_data_soc_med.RData"))
-
-
 ## Latex table
 stargazer(model9, model10a, model10b,
           title = "Models 9, .10a, and 10b - Explanatory factors in chemical agent usage",
@@ -134,58 +129,3 @@ stargazer(model9, model10a, model10b,
           covariate.labels = c("Counter Event", "Issue Racism", "Source: Social Media", "Left-Wing Protesters", "Constant"),
           stype = "APSR")
 
-# Coefficient plots
-# Put model estimates into temporary data.frames:
-model9Frame <- data.frame(Variable = rownames(summary(model9)$coef),
-                          Coefficient = summary(model9)$coef[, 1],
-                          SE = summary(model9)$coef[, 2],
-                          modelName = "Model 9 (ACLED)")
-model10aFrame <- data.frame(Variable = rownames(summary(model10a)$coef),
-                            Coefficient = summary(model10a)$coef[, 1],
-                            SE = summary(model10a)$coef[, 2],
-                            modelName = "Model 10a (CCC)")
-model10bFrame <- data.frame(Variable = rownames(summary(model10b)$coef),
-                            Coefficient = summary(model10b)$coef[, 1],
-                            SE = summary(model10b)$coef[, 2],
-                            modelName = "Model 10b (CCC)")
-
-# Combine these data.frames
-ca_model_frame <- data.frame(rbind(model9Frame, model10aFrame, model10bFrame)) %>% 
-  mutate(
-    Variable = case_when(
-      Variable == "(Intercept)" ~ "Intercept",
-      Variable == "counter_event1" ~ "Counter Event",
-      Variable == "issue_racism1" ~ "Issue Racism",
-      Variable == "source_soc_media1" ~ "Source: Social Media",
-      Variable == "valence1" ~ "Left-Wing Protesters",
-      T ~ Variable),
-    Variable = factor(Variable, levels = c("Intercept", "Counter Event", "Issue Racism",
-                                           "Source: Social Media","Left-Wing Protesters")),
-    modelName = factor(modelName, levels = c("Model 9 (ACLED)", "Model 10a (CCC)", "Model 10b (CCC)")),
-    model_order = case_when(modelName == "Model 9 (ACLED)" ~ 1,
-                            modelName == "Model 10a (CCC)" ~ 2,
-                            T ~ 3))
-
-# Specify the width of your confidence intervals
-interval1 <- -qnorm((1-0.9)/2)  # 90% multiplier
-interval2 <- -qnorm((1-0.95)/2)  # 95% multiplier
-
-# Coefficent plot
-ca_plot <- ggplot(ca_model_frame, aes(colour = reorder(modelName, -model_order)))
-ca_plot <- ca_plot + geom_hline(yintercept = 1, colour = gray(1/2), lty = 2)
-ca_plot <- ca_plot + geom_linerange(aes(x = Variable, ymin = Coefficient - SE*interval1,
-                                        ymax = Coefficient + SE*interval1),
-                                    lwd = 1, position = position_dodge(width = 1/2))
-ca_plot <- ca_plot + geom_pointrange(aes(x = Variable, y = Coefficient, ymin = Coefficient - SE*interval2,
-                                         ymax = Coefficient + SE*interval2),
-                                     lwd = 1/2, position = position_dodge(width = 1/2),
-                                     shape = 16)
-ca_plot <- ca_plot + coord_flip() + scale_color_discrete(guide=guide_legend(reverse=T)) +
-  theme_bw()
-ca_plot <- ca_plot +
-  labs(y = "Log Odds", colour = "Model") +
-  theme_minimal()
-
-ggsave(paste0("results_chemical_agents_soc_media.png"), plot = ca_plot, width = 8, height=5, path=pathGraphics)
-
-print(ca_plot)

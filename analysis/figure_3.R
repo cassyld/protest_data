@@ -17,9 +17,8 @@ library(viridis)
 # cd user paths
 if(Sys.info()['user'] %in% c('dorffc')){
   pathGit = '~/ProjectsGit/protest_data/'
-  pathDrop = '~/Dropbox/Research/protest_data/'
   pathData = paste0(pathGit, 'data/')
-  pathGraphics = paste0(pathDrop, 'graphics/')
+  pathGraphics = paste0(pathGit, 'graphics/')
 }
 
 # ak user paths
@@ -145,3 +144,4 @@ figure3 <- both_grp %>%
         strip.text = element_text(face = "bold"))
 
 figure3
+#ggsave(paste0(pathGraphics, "figure3.png"), plot = figure3, width = 8, height=5)
