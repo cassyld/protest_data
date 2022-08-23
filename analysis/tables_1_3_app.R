@@ -81,7 +81,7 @@ nspe <- read_dta(paste0(pathData,"nspe_project.dta"))
 
 # filter both data to most recently completed month 
 acled <- acled %>% filter(event_date < ymd("2021-08-01"))
-ccc_counter <- ccc %>% filter(date < ymd("2021-08-01"))
+ccc <- ccc %>% filter(date < ymd("2021-08-01"))
 ####################################################################
 
 # Note: Table 1 is a qualitative table and does not use code
