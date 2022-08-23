@@ -26,7 +26,7 @@ if(Sys.info()['user'] %in% c('dorffc')){
 
 # ak user paths
 if(Sys.info()['user'] %in% c('Amanda')){
-  pathGit = '~/Documents/Vanderbilt/c4_research_lab/c4_protestData/'
+  pathGit = '~/Documents/Vanderbilt/protest_data/'
   pathDrop = '~/Dropbox/c4_protestData/'
   pathData = paste0(pathGit, 'data/')
   pathGraphics = paste0(pathDrop, 'graphics')
@@ -56,7 +56,12 @@ acled_modeling <-
 
 
 # data cleaning
-ccc_modeling <- ccc_modeling %>% filter(!(counter_event == 0 & matching_counter == 1))
+ccc_modeling <- ccc_modeling %>%
+  filter(!(counter_event == 0 & matching_counter == 1)) %>% 
+  filter(date < ymd("2021-08-01"))
+
+acled_modeling <- acled_modeling %>% 
+  filter(event_date < ymd("2021-08-01"))
 ####################################################################
 
 ####################################################################
@@ -118,7 +123,23 @@ model8a <- glm(arrests_any ~ counter_event + issue_racism,
 model8b <- glm(arrests_any ~ counter_event + issue_racism + valence,
                data = ccc_arr_balanced, family = "binomial")
 
-summary(model8b)
+####################################################################
+
+####################################################################
+## Model Performance
+
+# generate predictions on test data
+m7_resp = predict(model7, newdata = acled_arr_test, type = "response")
+m7_pred = ifelse(m7_resp > 0.5, "yes", "no")
+m8a_resp = predict(model8a, newdata = ccc_arr_test, type = "response")
+m8a_pred = ifelse(m8a_resp > 0.5, "yes", "no")
+m8b_resp = predict(model8b, newdata = ccc_arr_test, type = "response")
+m8b_pred = ifelse(m8b_resp > 0.5, "yes", "no")
+
+# calculate accuracy & sensitivity
+#confusionMatrix(as.factor(m7_pred), acled_arr_test$arrests_any)
+#confusionMatrix(as.factor(m8a_pred), ccc_arr_test$arrests_any)
+#confusionMatrix(as.factor(m8b_pred), ccc_arr_test$arrests_any)
 
 # Latex table
 # TABLE 7 Appendix

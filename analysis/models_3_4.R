@@ -26,7 +26,7 @@ if(Sys.info()['user'] %in% c('dorffc')){
 
 # ak user paths
 if(Sys.info()['user'] %in% c('Amanda')){
-  pathGit = '~/Documents/Vanderbilt/c4_research_lab/c4_protestData/'
+  pathGit = '~/Documents/Vanderbilt/protest_data/'
   pathDrop = '~/Dropbox/c4_protestData/'
   pathData = paste0(pathGit, 'data/')
   pathGraphics = paste0(pathDrop, 'graphics')
@@ -57,7 +57,12 @@ acled_modeling <-
 
 
 # data cleaning
-ccc_modeling <- ccc_modeling %>% filter(!(counter_event == 0 & matching_counter == 1))
+ccc_modeling <- ccc_modeling %>%
+  filter(!(counter_event == 0 & matching_counter == 1)) %>% 
+  filter(date < ymd("2021-08-01"))
+
+acled_modeling <- acled_modeling %>% 
+  filter(event_date <ymd("2021-08-01"))
 ####################################################################
 
 ####################################################################
@@ -180,5 +185,5 @@ arr_plot <- arr_plot + coord_flip() + scale_color_discrete(guide=guide_legend(re
 arr_plot <- arr_plot + #ggtitle("Explanatory Factors in Arrests") +
   labs(y = "Log Odds", colour = "Model")  +
   theme_minimal()
-#ggsave("results_full_data_arrests.png", plot = arr_plot, width = 8, height=5, path = pathGraphics)
+#ggsave("results_full_data_arrests.png", plot = arr_plot, width = 8, height=5)#), path = pathGraphics)
 print(arr_plot)

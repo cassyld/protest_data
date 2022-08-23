@@ -24,7 +24,7 @@ if(Sys.info()['user'] %in% c('dorffc')){
 }
 # ak user paths
 if(Sys.info()['user'] %in% c('Amanda')){
-  pathGit = '~/Documents/Vanderbilt/c4_research_lab/c4_protestData/'
+  pathGit = '~/Documents/Vanderbilt/protest_data/'
   pathDrop = '~/Dropbox/c4_protestData/'
   pathData = paste0(pathGit, 'data/')
   pathGraphics = paste0(pathDrop, 'graphics')
@@ -55,7 +55,12 @@ acled_modeling <-
 
 
 # data cleaning
-ccc_modeling <- ccc_modeling %>% filter(!(counter_event == 0 & matching_counter == 1))
+ccc_modeling <- ccc_modeling %>%
+  filter(!(counter_event == 0 & matching_counter == 1)) %>% 
+  filter(date < ymd("2021-08-01"))
+
+acled_modeling <- acled_modeling %>% 
+  filter(event_date < ymd("2021-08-01"))
 ####################################################################
 
 ####################################################################

@@ -24,7 +24,7 @@ if(Sys.info()['user'] %in% c('dorffc')){
 }
 # ak user paths
 if(Sys.info()['user'] %in% c('Amanda')){
-  pathGit = '~/Documents/Vanderbilt/c4_research_lab/c4_protestData/'
+  pathGit = '~/Documents/Vanderbilt/protest_data/'
   pathDrop = '~/Dropbox/c4_protestData/'
   pathData = paste0(pathGit, 'data/')
   pathGraphics = paste0(pathDrop, 'graphics')
@@ -54,7 +54,12 @@ acled_modeling <-
 
 
 # data cleaning
-ccc_modeling <- ccc_modeling %>% filter(!(counter_event == 0 & matching_counter == 1))
+ccc_modeling <- ccc_modeling %>%
+  filter(!(counter_event == 0 & matching_counter == 1)) %>% 
+  filter(date < ymd("2021-08-01"))
+
+acled_modeling <- acled_modeling %>% 
+  filter(event_date < ymd("2021-08-01"))
 ####################################################################
 
 ####################################################################
@@ -120,6 +125,24 @@ model6a <- glm(chemical_agents ~ counter_event + issue_racism,
 model6b <- glm(chemical_agents ~ counter_event + issue_racism + valence,
                data = ccc_chem_balanced, family = "binomial")
 
+
+####################################################################
+
+####################################################################
+## Model Performance
+
+# generate predictions on test data
+m5_resp = predict(model5, newdata = acled_chem_test, type = "response")
+m5_pred = ifelse(m5_resp > 0.5, "yes", "no")
+m6a_resp = predict(model6a, newdata = ccc_chem_test, type = "response")
+m6a_pred = ifelse(m6a_resp > 0.5, "yes", "no")
+m6b_resp = predict(model6b, newdata = ccc_chem_test, type = "response")
+m6b_pred = ifelse(m6b_resp > 0.5, "yes", "no")
+
+# calculate accuracy & sensitivity
+#confusionMatrix(as.factor(m5_pred), acled_chem_test$chemical_agents)
+#confusionMatrix(as.factor(m6a_pred), ccc_chem_test$chemical_agents)
+#confusionMatrix(as.factor(m6b_pred), ccc_chem_test$chemical_agents)
 ####################################################################
 
 ####################################################################
@@ -137,4 +160,3 @@ stargazer(model5, model6a, model6b,
           dep.var.labels = "Chemical Agents",
           covariate.labels = c("Counter Event", "Issue Racism", "Left-Wing Protesters", "Constant"),
           stype = "APSR")
-

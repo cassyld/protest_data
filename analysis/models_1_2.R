@@ -24,7 +24,7 @@ if(Sys.info()['user'] %in% c('dorffc')){
 }
 # ak user paths
 if(Sys.info()['user'] %in% c('Amanda')){
-  pathGit = '~/Documents/Vanderbilt/c4_research_lab/c4_protestData/'
+  pathGit = '~/Documents/Vanderbilt/protest_data/'
   pathDrop = '~/Dropbox/c4_protestData/'
   pathData = paste0(pathGit, 'data/')
   pathGraphics = paste0(pathDrop, 'graphics')
@@ -55,16 +55,23 @@ acled_modeling <-
 
 
 # data cleaning
-ccc_modeling <- ccc_modeling %>% filter(!(counter_event == 0 & matching_counter == 1))
-# set up df with only necessary predictors
-acled_chem <- acled_modeling %>%
-  select(counter_event, issue_racism = racism, chemical_agents) %>% 
-  filter(across(everything(), ~ !is.na(.x)))
+ccc_modeling <- ccc_modeling %>%
+  filter(!(counter_event == 0 & matching_counter == 1)) %>% 
+  filter(date < ymd("2021-08-01"))
+
+acled_modeling <- acled_modeling %>% 
+  filter(event_date < ymd("2021-08-01"))
 ####################################################################
 
 ####################################################################
 # sampling strategy to address extreme data imbalance
-# ACLED data
+# ACLED data (Model 1)
+
+# set up df with only necessary predictors
+acled_chem <- acled_modeling %>%
+  select(counter_event, issue_racism = racism, chemical_agents) %>% 
+  filter(across(everything(), ~ !is.na(.x)))
+
 acled_chem %>% group_by(chemical_agents) %>% summarize(n = n()) %>% mutate(tot = sum(n), prop = n/tot)
 
 # train/test
@@ -88,7 +95,7 @@ ccc_chem <- ccc_modeling %>%
          valence = ifelse(valence == 1, 1, 0),
          valence = as.character(valence))
 
-ccc_chem %>% group_by(counter_event) %>% summarize(n=n()) %>%
+ccc_chem %>% group_by(chemical_agents) %>% summarize(n=n()) %>%
   mutate(tot = sum(n), prop = n/tot)
 
 # train/test
