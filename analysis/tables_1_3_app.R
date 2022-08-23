@@ -68,11 +68,11 @@ ccc <- readr::read_csv(paste0(pathData,"ccc_clean_counter_indicator.csv"),
 
 # acled
 acled <- read_csv(paste0(pathData,"acled_clean.csv"))
-acled_pepper_irr <- read_csv("../data/acled_chem_agents/pepper_irritants_acled_notes.csv") %>%
+acled_pepper_irr <- read_csv(paste0(pathData, "acled_chem_agents/pepper_irritants_acled_notes.csv")) %>%
   filter(keep == 1) %>% 
   select(-target)
 
-acled_teargas <- read_csv("../data/acled_chem_agents/teargas_acled_notes.csv") %>%
+acled_teargas <- read_csv(paste0(pathData, "acled_chem_agents/teargas_acled_notes.csv")) %>%
   filter(keep == 1) %>% 
   select(data_id, keep, context = tear_gas_context, notes)
 
@@ -83,6 +83,8 @@ nspe <- read_dta(paste0(pathData,"nspe_project.dta"))
 acled <- acled %>% filter(event_date < ymd("2021-08-01"))
 ccc_counter <- ccc %>% filter(date < ymd("2021-08-01"))
 ####################################################################
+
+# Note: Table 1 is a qualitative table and does not use code
 
 ####################################################################
 # Appendix Table 2 "CCC-Reported Risks to Protesters at 

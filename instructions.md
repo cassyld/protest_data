@@ -15,33 +15,33 @@ Replication files for each figure are separated into their own executable R file
 
 ### Replication for descriptive tables (Tables 1-6)
 
-1. See R file "tables.R"
+1. See R file "tables_1_6.R"
 
-- table 1 (fail)
+- table 1 (pass)
 - table 2 (pass)
-- table 3 (fail)
+- table 3 (pass)
 - table 4 (pass)
 - table 5 (pass)
-- table 6 (fail)
+- table 6 (pass)
 
 ### Replication of main models
 
 1. For the main models in the manuscript, including their graphics and tabular versions in the appendix, see:
 
 - `models_1_2.R` (pass)
-- `models_3_4.R` (fail)
+- `models_3_4.R` (pass)
 
 ###  Replication of appendix materials
 
 1. See "tables_app.R" for all code to replicate descriptive tables in the appendix
 
-- table  2 (pass)
-- table 3 (fail)
+- table 2 (pass)
+- table 3 (pass)
 
 2. See the following appendix modeling files for supplemental models:
 
-- `models_5_6_app.R` (to-do)
-- `models_7_8_app.R` (to-do)
+- `models_5_6_app.R` (pass)
+- `models_7_8_app.R` (pass)
 - `models_9_10_app.R` (pass)
 - `models_11_12_app.R` (pass)
 

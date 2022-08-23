@@ -1,12 +1,12 @@
 ####################################################################
-# Replication Main Models 9, 10a, 10b
+# Replication Appendix Models 9, 10a, 10b
 # Paper Title: Data Innovations on Protests in the United States
 # Authors: Cassy Dorff, Grace Adcox, Amanda Konet
 ####################################################################
-# libraries
-# data manip
+
 rm(list = ls())
 
+# libraries
 library(tidyverse)
 library(ggplot2)
 library(viridis)

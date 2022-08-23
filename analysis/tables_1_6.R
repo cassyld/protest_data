@@ -1,5 +1,5 @@
 ####################################################################
-# Replication for all Tables in MS
+# Replication for all Tables in Main MS
 # Paper Title: Data Innovations on Protests in the United States
 # Authors: Cassy Dorff, Grace Adcox, Amanda Konet
 ####################################################################
@@ -68,11 +68,11 @@ ccc <- readr::read_csv(paste0(pathData,"ccc_clean_counter_indicator.csv"),
 
 # acled
 acled <- read_csv(paste0(pathData,"acled_clean.csv"))
-acled_pepper_irr <- read_csv("../data/acled_chem_agents/pepper_irritants_acled_notes.csv") %>%
+acled_pepper_irr <- read_csv(paste0(pathData, "acled_chem_agents/pepper_irritants_acled_notes.csv")) %>%
   filter(keep == 1) %>% 
   select(-target)
 
-acled_teargas <- read_csv("../data/acled_chem_agents/teargas_acled_notes.csv") %>%
+acled_teargas <- read_csv(paste0(pathData, "acled_chem_agents/teargas_acled_notes.csv")) %>%
   filter(keep == 1) %>% 
   select(data_id, keep, context = tear_gas_context, notes)
 
@@ -95,7 +95,6 @@ ccc_issues <- ccc_counter %>%
 
 ccc_issues %>% distinct(issues_clean) %>% nrow()
 
-# BREAK: numbers do not match MS
 # top 10 issues
 ccc_top_issues <- ccc_issues %>% 
   filter(!is.na(issues_clean)) %>% 
@@ -108,7 +107,7 @@ ccc_top_issues <- ccc_issues %>%
 ccc_top_issues_kb <- ccc_top_issues %>% 
   rename(`Issue Area` = issues_clean, `Event Count` = n) %>% 
   kable(., caption = "Table 1: Top 10 CCC Event Issues") %>% 
-  kable_styling() 
+  kable_styling()
 ####################################################################
 
 ####################################################################
@@ -134,7 +133,6 @@ acled <- acled %>%
   mutate(counter_event = ifelse(grepl("\\[counter", notes), 1, 0))
 
 ## acled counter-protest distribution by year
-## BREAK does not match MS
 acled %>% filter(counter_event == 1) %>% 
   group_by(year(event_date)) %>% 
   summarize(n = n()) %>% 
@@ -185,8 +183,7 @@ ccc %>%
 ####################################################################
   
 ####################################################################  
-# Table 6: ACLED-Reported Risks to Protesters at Counter-Protest Events
-# BREAK: very similar results, but not quite whats in the MS 
+# Table 6: ACLED-Reported Risks to Protesters at Counter-Protest EventsS 
 acled <- acled %>% 
   mutate(arrests_any = case_when(
     is.na(arrests) ~ 0,

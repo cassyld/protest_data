@@ -1,12 +1,12 @@
 ####################################################################
-# Replication Main Models 1, 2a, 2b
+# Replication Appendix Models 11, 12a, 12b
 # Paper Title: Data Innovations on Protests in the United States
 # Authors: Cassy Dorff, Grace Adcox, Amanda Konet
 ####################################################################
-# libraries
-# data manip
+
 rm(list = ls())
 
+# libraries
 library(tidyverse)
 library(ggplot2)
 library(viridis)
@@ -106,8 +106,6 @@ model12a <- glm(arrests_any ~ . - valence,
 model12b <- glm(arrests_any ~ .,
                 data = ccc_arr_balanced, family = "binomial")
 
-# save
-#save(model11, model12a, model12b, file = paste0(pathData,"arrest_models_full_data_soc_med.RData"))
 
 # Latex table
 stargazer(model11, model12a, model12b,

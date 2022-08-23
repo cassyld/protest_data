@@ -1,12 +1,12 @@
 ####################################################################
-# Replication Models 7, 8a, 8b
+# Replication Appendix Models 7, 8a, 8b
 # Paper Title: Data Innovations on Protests in the United States
 # Authors: Cassy Dorff, Grace Adcox, Amanda Konet
 ####################################################################
-# libraries
-# data manip
+
 rm(list = ls())
 
+# libraries
 library(tidyverse)
 library(ggplot2)
 library(viridis)
@@ -119,8 +119,6 @@ model8b <- glm(arrests_any ~ counter_event + issue_racism + valence,
                data = ccc_arr_balanced, family = "binomial")
 
 summary(model8b)
-# save
-#save(model7, model8a, model8b, file = paste0(pathData,"arrest_models.RData"))
 
 # Latex table
 # TABLE 7 Appendix
@@ -134,4 +132,4 @@ stargazer(model7, model8a, model8b,
           omit.stat=c("ser","f"),
           align=TRUE,
           dep.var.labels = "Arrest",
-          covariate.labels = c("Counter Event", "Issue Racism", "Left-Wing Protesters", "Constant"))#,
+          covariate.labels = c("Counter Event", "Issue Racism", "Left-Wing Protesters", "Constant"))

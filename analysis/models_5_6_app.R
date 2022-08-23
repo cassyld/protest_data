@@ -1,10 +1,10 @@
 ####################################################################
-# Replication Models 5, 6a, 6b
+# Replication Appendix Models 5, 6a, 6b
 # Paper Title: Data Innovations on Protests in the United States
 # Authors: Cassy Dorff, Grace Adcox, Amanda Konet
 ####################################################################
 # libraries
-# data manip
+
 rm(list = ls())
 
 library(tidyverse)
@@ -120,9 +120,6 @@ model6a <- glm(chemical_agents ~ counter_event + issue_racism,
 model6b <- glm(chemical_agents ~ counter_event + issue_racism + valence,
                data = ccc_chem_balanced, family = "binomial")
 
-# save
-# save(model5, model6a, model6b,
-#    file =paste0(pathData,"chemical_agent_models.RData"))
 ####################################################################
 
 ####################################################################
@@ -139,5 +136,5 @@ stargazer(model5, model6a, model6b,
           align=TRUE,
           dep.var.labels = "Chemical Agents",
           covariate.labels = c("Counter Event", "Issue Racism", "Left-Wing Protesters", "Constant"),
-          stype = "APSR")#,
+          stype = "APSR")
 
