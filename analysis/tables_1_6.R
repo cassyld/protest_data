@@ -16,7 +16,7 @@ if(Sys.info()['user'] %in% c('dorffc')){
 
 # ak user paths
 if(Sys.info()['user'] %in% c('Amanda')){
-  pathGit = '~/Documents/Vanderbilt/c4_research_lab/c4_protestData/'
+  pathGit = '~/Documents/Vanderbilt/c4_research_lab/protest_data/'
   pathDrop = '~/Dropbox/c4_protestData/'
   pathData = paste0(pathGit, 'data/')
   pathGraphics = paste0(pathDrop, 'graphics')
@@ -81,12 +81,12 @@ nspe <- read_dta(paste0(pathData,"nspe_project.dta"))
 
 # filter both data to most recently completed month 
 acled <- acled %>% filter(event_date < ymd("2021-08-01"))
-ccc_counter <- ccc %>% filter(date < ymd("2021-08-01"))
+ccc <- ccc %>% filter(date < ymd("2021-08-01"))
 ####################################################################
 
 ####################################################################
 # Table 1: Ten most frequently referenced issues, CCC 
-ccc_issues <- ccc_counter %>%
+ccc_issues <- ccc %>%
   mutate(issues_clean = str_split(issues, pattern = ";")) %>% 
   select(date, resolved_locality, resolved_county, resolved_state,
          issues, issues_clean) %>% 
