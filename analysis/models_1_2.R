@@ -140,7 +140,7 @@ stargazer(model1, model2a, model2b,
           align=TRUE,
           dep.var.labels = "Chemical Agents",
           covariate.labels = c("Counter Event", "Issue Racism", "Left-Wing Protesters", "Constant"),
-          stype = "APSR")#,
+          stype = "APSR")
 
 
 # Model graphics

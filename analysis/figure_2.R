@@ -15,7 +15,6 @@ library(patchwork)
 library(viridis)
 
 # cd user paths
-# cd user paths
 if(Sys.info()['user'] %in% c('dorffc')){
   pathGit = '~/ProjectsGit/protest_data/'
   pathData = paste0(pathGit, 'data/')
@@ -106,5 +105,5 @@ figure2 = ggplot() +
 
 figure2
 
-ggsave(paste0(pathGraphics, "figure2.png"), plot = figure2, width = 8, height=5)
+#ggsave(paste0(pathGraphics, "figure2.png"), plot = figure2, width = 8, height=5)
 
