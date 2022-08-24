@@ -9,6 +9,7 @@ rm(list = ls())
 
 library(tidyverse)
 library(ggplot2)
+library(lubridate)
 library(viridis)
 library(stargazer)
 library(coefplot)
@@ -159,8 +160,8 @@ model2bFrame <- data.frame(Variable = rownames(summary(model2b)$coef),
 
 # combine these data.frames
 ca_model_frame <- data.frame(rbind(model1Frame, model2aFrame, model2bFrame)) %>% 
-  mutate(
-    Variable = case_when(
+  dplyr::mutate(
+    Variable = dplyr::case_when(
       Variable == "(Intercept)" ~ "Intercept",
       Variable == "counter_event1" ~ "Counter Event",
       Variable == "issue_racism1" ~ "Issue Racism",

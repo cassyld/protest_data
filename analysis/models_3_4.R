@@ -152,7 +152,7 @@ model4bFrame <- data.frame(Variable = rownames(summary(model4b)$coef),
 # Combine these data.frames
 arr_model_frame <- data.frame(rbind(model3Frame, model4aFrame, model4bFrame)) %>% 
   mutate(
-    Variable = case_when(
+    Variable = dplyr::case_when(
       Variable == "(Intercept)" ~ "Intercept",
       Variable == "counter_event1" ~ "Counter Event",
       Variable == "issue_racism1" ~ "Issue Racism",
