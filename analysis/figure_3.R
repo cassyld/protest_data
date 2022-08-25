@@ -73,7 +73,6 @@ acled_top <- acled %>%
   filter((location == "New York City" & state == "New York") |
            (location == "Seattle" & state == "Washington") |
            (location == "San Francisco" & state == "California") |
-           #(location == "Philadelphia" & state == "Pennsylvania") |
            (location == "Los Angeles" & state == "California") |
            (location == "Washington DC" & state == "District of Columbia"))
 
@@ -84,7 +83,6 @@ ccc_top <- ccc %>%
            (resolved_locality == "Los Angeles" & resolved_state == "CA") |
            (resolved_locality == "Washington" & resolved_state == "DC") |
            (resolved_locality == "Seattle" & resolved_state == "WA") |
-           #(resolved_locality == "Philadelphia" & resolved_state == "PA") |
            (resolved_locality == "San Francisco" & resolved_state == "CA"))
 
 ## get social media only events for CCC

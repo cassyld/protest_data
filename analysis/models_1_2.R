@@ -4,7 +4,6 @@
 # Authors: Cassy Dorff, Grace Adcox, Amanda Konet
 ####################################################################
 # libraries
-# data manip
 rm(list = ls())
 
 library(tidyverse)
