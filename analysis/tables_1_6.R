@@ -16,10 +16,10 @@ if(Sys.info()['user'] %in% c('dorffc')){
 
 # ak user paths
 if(Sys.info()['user'] %in% c('Amanda')){
-  pathGit = '~/Documents/Vanderbilt/c4_research_lab/protest_data/'
+  pathGit = '~/Documents/Vanderbilt/protest_data/'
   pathDrop = '~/Dropbox/c4_protestData/'
   pathData = paste0(pathGit, 'data/')
-  pathGraphics = paste0(pathDrop, 'graphics')
+  pathGraphics = paste0(pathDrop, 'graphics/')
 }
 
 # libraries
@@ -123,6 +123,40 @@ nspe_top_issues_kb <- nspe_top_issues %>%
   rename(`Issue Area` = issue, `Event Count` = num_events) %>% 
   kable(., caption = "Table 2: Ten most frequently referenced issue areas in the NSPE data.") %>% 
   kable_styling() 
+
+####################################################################
+
+####################################################################
+# ACLED issue areas
+
+## identify events with racial justice as an issue area
+acled %>% 
+  filter(grepl("NAACP|BLM|BVM|African American Group (United States)", assoc_actor_1) | 
+           grepl("NAACP|BLM|BVM|African American Group (United States)", assoc_actor_2)) %>%
+  nrow()
+
+####################################################################
+
+####################################################################
+# NSPE issue areas
+
+## med and mean number of issues reported per event
+nspe %>% select(cabort:cworker, creligcomb) %>% 
+  mutate(num_issues = rowSums(.)) %>% 
+  pull(num_issues) %>% 
+  summary()
+
+## number of events with more than ten issues
+nspe %>% select(cabort:cworker, creligcomb) %>% 
+  mutate(num_issues = rowSums(.)) %>% 
+  filter(num_issues >= 10) %>% 
+  nrow()
+
+## events w/30 issues
+nspe %>% select(cabort:cworker, creligcomb) %>% 
+  mutate(num_issues = rowSums(.)) %>% 
+  filter(num_issues == 30) %>% 
+  nrow()
 ####################################################################
 
 ####################################################################

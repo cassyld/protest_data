@@ -32,10 +32,10 @@ if(Sys.info()['user'] %in% c('dorffc')){
 
 # ak user paths
 if(Sys.info()['user'] %in% c('Amanda')){
-  pathGit = '~/Documents/Vanderbilt/c4_research_lab/c4_protestData/'
+  pathGit = '~/Documents/Vanderbilt/protest_data/'
   pathDrop = '~/Dropbox/c4_protestData/'
   pathData = paste0(pathGit, 'data/')
-  pathGraphics = paste0(pathDrop, 'graphics/acled_protest_only')
+  pathGraphics = paste0(pathDrop, 'graphics/')
 }
 ####################################################################
 
@@ -108,46 +108,24 @@ fips_pop <- read_csv(paste0(pathData,"population_by_fips.csv")) %>%
 
 
 ####################################################################
-## data prep
-## coverage
-acled %>% group_by(location, state, .groups = "keep") %>% 
-  summarize(n = n()) %>% select(-.groups) %>% nrow()
+# Spatial Coverage
 
-## median number of events per location
+## ACLED coverage
+acled %>%
+  group_by(location, county, state) %>% 
+  summarize(n = n(), .groups = "keep") %>%
+  nrow()
+
+## median number of events per location (ACLED)
 acled %>% 
   mutate(location = ifelse(grepl("New York - ", location), "New York City", location),
          county = ifelse(grepl("New York City", location), "New York City", county)) %>% 
-  group_by(location, county, state, .groups = "keep") %>% 
-  summarize(n = n()) %>% 
+  group_by(location, county, state) %>% 
+  summarize(n = n(), .groups = "keep") %>% 
   pull(n) %>% 
   summary()
 
-## proportion of events accounted for by top 10 cities
-acled %>%  
-  mutate(location = ifelse(grepl("New York - ", location), "New York City", location),
-         county = ifelse(grepl("New York City", location), "New York City", county)) %>% 
-  group_by(location, county, state, .groups = "keep") %>%
-  summarize(n = n()) %>% 
-  ungroup() %>% 
-  mutate(prop_events = n / sum(n)) %>% 
-  arrange(-prop_events) %>%
-  # prop accounted for by top n cities 
-  head(5) %>% 
-  pull(prop_events) %>% 
-  sum()
-
-## proportion of locations with 2 events or less
-acled %>%  
-  mutate(location = ifelse(grepl("New York - ", location), "New York City", location),
-         county = ifelse(grepl("New York City", location), "New York City", county)) %>% 
-  group_by(location, county, state, .groups = "keep") %>%
-  summarize(n = n()) %>% 
-  mutate(n_event = ifelse(n <= 2, 1, 0)) %>% 
-  group_by(n_event) %>% 
-  summarize(n = n()) %>% 
-  mutate(prop = n/sum(n))
-
-## proportion of locations with 3 events or less
+## proportion of locations with 3 events or less (ACLED)
 acled %>%  
   mutate(location = ifelse(grepl("New York - ", location), "New York City", location),
          county = ifelse(grepl("New York City", location), "New York City", county)) %>% 
@@ -157,6 +135,29 @@ acled %>%
   group_by(n_event) %>% 
   summarize(n = n()) %>% 
   mutate(prop = n/sum(n))
+
+## coverage(CCC)
+ccc %>%
+  group_by(resolved_locality, resolved_county, resolved_state) %>% 
+  summarize(n = n(), .groups = "keep") %>%
+  nrow()
+
+## median number of events per location (CCC)
+ccc %>%
+  group_by(resolved_locality, resolved_county, resolved_state) %>% 
+  summarize(n = n(), .groups = "keep") %>% 
+  pull(n) %>% 
+  summary()
+
+## proportion of locations with 3 events or less (CCC)
+ccc %>%
+  group_by(resolved_locality, resolved_county, resolved_state) %>% 
+  summarize(n = n(), .groups = "keep") %>% 
+  mutate(n_event = ifelse(n <= 3, 1, 0)) %>% 
+  group_by(n_event) %>% 
+  summarize(n = n()) %>% 
+  mutate(prop = n/sum(n))
+
 ####################################################################
 
 ####################################################################
