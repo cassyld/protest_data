@@ -177,7 +177,7 @@ interval1 <- -qnorm((1-0.9)/2)  # 90% multiplier
 interval2 <- -qnorm((1-0.95)/2)  # 95% multiplier
 
 # coefficient plot
-ca_plot <- ggplot(ca_model_frame, aes(colour = reorder(modelName, -model_order))) +
+figure6 <- ggplot(ca_model_frame, aes(colour = reorder(modelName, -model_order))) +
   geom_hline(yintercept = 0, colour = gray(1/2), lty = 2) +
   geom_linerange(aes(x = Variable, ymin = Coefficient - SE*interval1,
                      ymax = Coefficient + SE*interval1),
@@ -193,8 +193,8 @@ ca_plot <- ggplot(ca_model_frame, aes(colour = reorder(modelName, -model_order))
   labs(y = "Log Odds", colour = "Model") +
   theme_minimal()
 
-print(ca_plot)
-#ggsave(paste0(pathGraphics, "results_full_data_chemical_agents.png"), plot = ca_plot, width = 8, height=5)
+figure6
+#ggsave(paste0(pathGraphics, "figure6.png"), plot = figure6, width = 8, height=5)
 
 
 

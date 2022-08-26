@@ -65,6 +65,8 @@ ccc_modeling <- ccc_modeling %>%
 acled_modeling <- acled_modeling %>% 
   filter(event_date < ymd("2021-08-01"))
 ####################################################################
+
+####################################################################
 # Influence of Social Media Reporting
 ## ACLED data (Model 9)
 

@@ -217,7 +217,7 @@ ccc %>%
 ####################################################################
   
 ####################################################################  
-# Table 6: ACLED-Reported Risks to Protesters at Counter-Protest EventsS 
+# Table 6: ACLED-Reported Risks to Protesters at Counter-Protest Events
 acled <- acled %>% 
   mutate(arrests_any = case_when(
     is.na(arrests) ~ 0,

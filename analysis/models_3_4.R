@@ -181,8 +181,9 @@ arr_plot <- arr_plot + geom_pointrange(aes(x = Variable,
                                        lwd = 1/2, position = position_dodge(width = 1/2),
                                        shape = 16)
 arr_plot <- arr_plot + coord_flip() + scale_color_discrete(guide=guide_legend(reverse=T)) + theme_bw()
-arr_plot <- arr_plot + #ggtitle("Explanatory Factors in Arrests") +
+figure7 <- arr_plot + #ggtitle("Explanatory Factors in Arrests") +
   labs(y = "Log Odds", colour = "Model")  +
   theme_minimal()
-#ggsave("results_full_data_arrests.png", plot = arr_plot, width = 8, height=5)#), path = pathGraphics)
-print(arr_plot)
+#ggsave("figure7.png", plot = figure7, width = 8, height=5)), path = pathGraphics)
+
+figure7
