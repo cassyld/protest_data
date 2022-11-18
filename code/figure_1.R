@@ -58,10 +58,13 @@ tl_df <- readxl::read_xlsx(paste0(pathData, "timeline_events_datasets.xlsx"),
 tl_df
 
 tl_df <- tl_df[!tl_df$name == "SPEED",]
+
+# factor on name - manually order by levels of coverage
 tl_df <- tl_df %>% 
-  mutate(# factor on name - manually order by levels of coverage
+  mutate(
     name_fct = factor(short_name, 
-                      levels = c(# REGIONAL
+                      levels = c(
+                        # REGIONAL
                         "SCAD",
                         # GLOBAL W/O U.S.
                         "MM", "MMAD", "WiRe",
@@ -88,6 +91,9 @@ figure1 = tl_df %>%
                size = 3) +
   coord_cartesian(xlim = c(1900, 2021)) +
   scale_x_continuous(breaks = seq(1900, 2020, 20)) +
+  #scale_colour_grey() +
+  scale_color_manual(values = c("black", "grey50", "red", "grey")) +
+  #scale_color_manual(values = c("#a6cee3", "#1f78b4", "#b2df8a", "#33a02c")) +
   labs(
     x = "Years",
     y = "Dataset",
@@ -97,4 +103,4 @@ figure1 = tl_df %>%
 
 figure1
 
-#ggsave(paste0(pathGraphics, "figure1.png"), plot = figure1, width = 8, height=5)
+#ggsave(paste0(pathGraphics, "figure1_color.pdf"), plot = figure1, dpi=350, width = 8, height=5)

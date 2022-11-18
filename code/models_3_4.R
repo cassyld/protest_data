@@ -180,10 +180,16 @@ arr_plot <- arr_plot + geom_pointrange(aes(x = Variable,
                                            ymax = Coefficient + SE*interval2),
                                        lwd = 1/2, position = position_dodge(width = 1/2),
                                        shape = 16)
-arr_plot <- arr_plot + coord_flip() + scale_color_discrete(guide=guide_legend(reverse=T)) + theme_bw()
+arr_plot <- arr_plot + 
+  coord_flip() + 
+  scale_color_manual(values=c("black", "grey50", "grey"),
+                              guide=guide_legend(reverse=T)) + 
+  theme_bw() 
+                       
 figure7 <- arr_plot + #ggtitle("Explanatory Factors in Arrests") +
   labs(y = "Log Odds", colour = "Model")  +
   theme_minimal()
-#ggsave("figure7.png", plot = figure7, width = 8, height=5)), path = pathGraphics)
 
 figure7
+
+ggsave(paste0(pathGraphics, "figure7.pdf"), plot = figure7, width = 8, height=5, dpi=350)

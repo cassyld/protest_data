@@ -134,6 +134,7 @@ figure3 <- both_grp %>%
   mutate(location = ifelse(location == "Washington DC", "Washington, D.C.", location)) %>% 
   ggplot(., aes(x = dataset, y = ct, fill = source)) + 
   geom_bar(stat = "identity", position = "stack") +
+  scale_fill_manual(values=c("grey70", "grey40")) +
   facet_grid(~ location) +
   labs(x = "Dataset", y = "Event Count", fill = "Source") +
   theme_bw() +
@@ -142,4 +143,5 @@ figure3 <- both_grp %>%
         strip.text = element_text(face = "bold"))
 
 figure3
-#ggsave(paste0(pathGraphics, "figure3.png"), plot = figure3, width = 8, height=5)
+#ggsave(paste0(pathGraphics, "figure3.pdf"), plot = figure3, 
+ #  width = 8, height=5, dpi=350)

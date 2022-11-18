@@ -188,13 +188,14 @@ figure6 <- ggplot(ca_model_frame, aes(colour = reorder(modelName, -model_order))
                   lwd = 1/2, position = position_dodge(width = 1/2),
                   shape = 16) +
   coord_flip() +
-  scale_color_discrete(guide=guide_legend(reverse=T)) +
+  scale_color_manual(values=c("black", "grey50", "grey"),
+                     guide=guide_legend(reverse=T)) +
   theme_bw() +
   labs(y = "Log Odds", colour = "Model") +
   theme_minimal()
 
 figure6
-#ggsave(paste0(pathGraphics, "figure6.png"), plot = figure6, width = 8, height=5)
+ggsave(paste0(pathGraphics, "figure6.pdf"), plot = figure6, width = 8, height=5, dpi=350)
 
 
 

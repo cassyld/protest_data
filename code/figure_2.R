@@ -81,7 +81,7 @@ ccc_by_moyr <- ccc %>%
   group_by(moyr) %>% summarize(n = n())
 
 # legend - color by dataset
-colors_events_moyr <- c("ACLED" = "forestgreen", "CCC" = "purple")
+colors_events_moyr <- c("ACLED" = "red", "CCC" = "black")
 
 # plot num events by moyr
 figure2 = ggplot() +
@@ -90,7 +90,7 @@ figure2 = ggplot() +
             alpha = 0.9) +
   geom_line(aes(x = moyr, y = n, color = "CCC"),
             data = ccc_by_moyr,
-            alpha = 0.4) +
+            alpha = 0.6) +
   coord_cartesian(ylim = c(0, 8000), xlim = c(ymd("2017-01-01"), ymd("2021-08-01"))) + 
   scale_color_manual(values = colors_events_moyr) +
   scale_x_date(date_labels = "%m-%y", breaks = "6 months",
@@ -105,5 +105,5 @@ figure2 = ggplot() +
 
 figure2
 
-#ggsave(paste0(pathGraphics, "figure2.png"), plot = figure2, width = 8, height=5)
+#ggsave(paste0(pathGraphics, "figure2_color.pdf"), plot = figure2, width = 8, height=5, dpi=350)
 

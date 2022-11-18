@@ -198,7 +198,7 @@ figure4 <- acled_by_county %>%
   theme(legend.position = "bottom")
 
 figure4
-#ggsave(paste0(pathGraphics, "figure4.png"), plot = figure4, width = 8, height=5)
+#ggsave(paste0(pathGraphics, "figure4.pdf"), plot = figure4, width = 8, height=5, dpi=350)
 ####################################################################
 
 # CCC: Use FIPS code directly
@@ -240,5 +240,5 @@ figure5 <- ccc_by_county %>%
   theme(legend.position = "bottom")
 
 figure5
-#ggsave(paste0(pathGraphics, "figure5.png"), plot = figure5, width = 8, height=5)
+#ggsave(paste0(pathGraphics, "figure5.pdf"), plot = figure5, width = 8, height=5, dpi=350)
 
